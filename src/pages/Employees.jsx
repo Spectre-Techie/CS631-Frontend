@@ -53,19 +53,19 @@ export default function Employees() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-slate-900 mb-2">👥 Employees</h1>
-        <p className="text-slate-600">Manage and view all employee information</p>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2">👥 Employees</h1>
+        <p className="text-sm sm:text-base text-slate-600">Manage and view all employee information</p>
       </div>
 
       {/* CREATE FORM */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
-        <h2 className="text-2xl font-bold text-slate-900 mb-6">Add New Employee</h2>
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 md:p-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6">Add New Employee</h2>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Full Name *</label>
               <input
@@ -135,12 +135,13 @@ export default function Employees() {
 
       {/* EMPLOYEE TABLE */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="p-8 border-b border-slate-200">
-          <h2 className="text-2xl font-bold text-slate-900">Employee Directory</h2>
+        <div className="p-4 sm:p-6 md:p-8 border-b border-slate-200">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Employee Directory</h2>
           <p className="text-slate-600 text-sm mt-1">{employees.length} total employee{employees.length !== 1 ? 's' : ''}</p>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
@@ -189,6 +190,57 @@ export default function Employees() {
           {employees.length === 0 && (
             <div className="p-12 text-center">
               <p className="text-slate-500 text-lg">No employees found. Create your first employee above.</p>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden divide-y divide-slate-200">
+          {employees.map((emp) => (
+            <div key={emp.employee_id} className="p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="font-medium text-slate-900">{emp.name}</p>
+                  <p className="text-sm text-slate-500">#{emp.employee_id}</p>
+                </div>
+                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${emp.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                  {emp.is_active ? '● Active' : '● Inactive'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div>
+                  <span className="text-slate-500">Type:</span>
+                  <span className={`ml-1 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${emp.employee_type === 'SALARY' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}`}>
+                    {emp.employee_type}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-500">Title:</span>
+                  <span className="ml-1 text-slate-900">{emp.title || '-'}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500">Dept:</span>
+                  <span className="ml-1 text-slate-900">{emp.department_name || '-'}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500">Office:</span>
+                  <span className="ml-1 text-slate-900">{emp.office_number || '-'}</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => deactivateEmployee(emp.employee_id)}
+                className="w-full px-4 py-2 bg-red-50 text-red-600 font-medium rounded-lg hover:bg-red-100 transition-colors duration-200 text-sm"
+              >
+                Deactivate
+              </button>
+            </div>
+          ))}
+
+          {employees.length === 0 && (
+            <div className="p-8 text-center">
+              <p className="text-slate-500">No employees found. Create your first employee above.</p>
             </div>
           )}
         </div>

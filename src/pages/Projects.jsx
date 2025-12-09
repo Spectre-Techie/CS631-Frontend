@@ -55,19 +55,19 @@ export default function Projects() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-slate-900 mb-2">📁 Projects</h1>
-        <p className="text-slate-600">Create and manage projects with team assignments</p>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2">📁 Projects</h1>
+        <p className="text-sm sm:text-base text-slate-600">Create and manage projects with team assignments</p>
       </div>
 
       {/* CREATE FORM */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
-        <h2 className="text-2xl font-bold text-slate-900 mb-6">Create New Project</h2>
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 md:p-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6">Create New Project</h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Project Number *</label>
               <input
@@ -147,12 +147,13 @@ export default function Projects() {
 
       {/* PROJECTS TABLE */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="p-8 border-b border-slate-200">
-          <h2 className="text-2xl font-bold text-slate-900">Project Directory</h2>
+        <div className="p-4 sm:p-6 md:p-8 border-b border-slate-200">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Project Directory</h2>
           <p className="text-slate-600 text-sm mt-1">{projects.length} active project{projects.length !== 1 ? 's' : ''}</p>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
@@ -187,11 +188,51 @@ export default function Projects() {
             </div>
           )}
         </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden divide-y divide-slate-200">
+          {projects.map((p) => (
+            <div key={p.project_id} className="p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="font-medium text-slate-900">{p.name}</p>
+                  <p className="text-sm font-medium text-blue-600">{p.project_number}</p>
+                </div>
+                <span className="text-sm text-slate-500">#{p.project_id}</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div>
+                  <span className="text-slate-500">Manager:</span>
+                  <span className="ml-1 text-slate-900">{p.manager_name || '-'}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500">Budget:</span>
+                  <span className="ml-1 font-semibold text-slate-900">${Number(p.budget).toLocaleString()}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500">Start:</span>
+                  <span className="ml-1 text-slate-900">{p.start_date?.slice(0, 10) || '-'}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500">End:</span>
+                  <span className="ml-1 text-slate-900">{p.end_date?.slice(0, 10) || '-'}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {projects.length === 0 && (
+            <div className="p-8 text-center">
+              <p className="text-slate-500">No projects found. Create your first project above.</p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ASSIGN EMPLOYEE FORM */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
-        <h2 className="text-2xl font-bold text-slate-900 mb-6">Assign Employee to Project</h2>
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 md:p-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6">Assign Employee to Project</h2>
 
         <form
           onSubmit={async (e) => {
@@ -211,9 +252,9 @@ export default function Projects() {
               console.error("Error assigning employee:", error);
             }
           }}
-          className="space-y-6"
+          className="space-y-4 sm:space-y-6"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Project ID *</label>
               <input

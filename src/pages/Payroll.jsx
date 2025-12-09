@@ -41,19 +41,19 @@ export default function Payroll() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-slate-900 mb-2">💰 Payroll Management</h1>
-        <p className="text-slate-600">Process and manage employee payroll with automatic tax calculations</p>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2">💰 Payroll Management</h1>
+        <p className="text-sm sm:text-base text-slate-600">Process and manage employee payroll with automatic tax calculations</p>
       </div>
 
       {/* CREATE PAYROLL FORM */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
-        <h2 className="text-2xl font-bold text-slate-900 mb-6">Run Payroll</h2>
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 md:p-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6">Run Payroll</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Employee ID *</label>
               <input
@@ -107,12 +107,13 @@ export default function Payroll() {
 
       {/* PAYROLL TABLE */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="p-8 border-b border-slate-200">
-          <h2 className="text-2xl font-bold text-slate-900">Payroll History</h2>
+        <div className="p-4 sm:p-6 md:p-8 border-b border-slate-200">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Payroll History</h2>
           <p className="text-slate-600 text-sm mt-1">{payrolls.length} payroll record{payrolls.length !== 1 ? 's' : ''}</p>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
@@ -144,6 +145,46 @@ export default function Payroll() {
           {payrolls.length === 0 && (
             <div className="p-12 text-center">
               <p className="text-slate-500 text-lg">No payroll records found. Submit your first payroll above.</p>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile/Tablet Card View */}
+        <div className="lg:hidden divide-y divide-slate-200">
+          {payrolls.map((p) => (
+            <div key={p.id} className="p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="font-medium text-slate-900">{p.employee_name}</p>
+                  <p className="text-sm text-slate-500">{p.period?.slice(0, 10)}</p>
+                </div>
+                <span className="text-sm font-semibold text-green-600">${Number(p.net).toFixed(2)} net</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div>
+                  <span className="text-slate-500">Gross:</span>
+                  <span className="ml-1 font-semibold text-slate-900">${Number(p.gross).toFixed(2)}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500">Federal:</span>
+                  <span className="ml-1 text-slate-900">${Number(p.federal_tax).toFixed(2)}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500">State:</span>
+                  <span className="ml-1 text-slate-900">${Number(p.state_tax).toFixed(2)}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500">Other:</span>
+                  <span className="ml-1 text-slate-900">${Number(p.other_tax).toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {payrolls.length === 0 && (
+            <div className="p-8 text-center">
+              <p className="text-slate-500">No payroll records found. Submit your first payroll above.</p>
             </div>
           )}
         </div>
